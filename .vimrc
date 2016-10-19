@@ -14,7 +14,7 @@ Plugin 'gmarik/Vundle.vim'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'nvie/vim-flake8'
-Plugin 'jnurmine/Zenburn'
+Plugin 'flazz/vim-colorschemes'
 
 
 " All of your Plugins must be added before the following line
@@ -25,7 +25,7 @@ filetype plugin indent on    " required
 " Basic stuff
 syntax on
 set nu
-colorscheme zenburn
+colorscheme brogrammer
 
 " Press F4 to toggle highlighting on/off, and show current value.
 :noremap <F4> :set hlsearch! hlsearch?<CR>
