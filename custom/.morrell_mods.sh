@@ -7,8 +7,8 @@ alias pdw="pwd"
 alias json="jq '.'"
 alias tac='tail -r'
 alias updatedb="sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist"
-alias whattime='python ~/whattime.py'
-alias honeycomb='python ~/honeycomb.py'
+alias whattime='python ~/custom/whattime.py'
+alias honeycomb='python ~/custom/honeycomb.py'
 
 
 function ipgrab()
