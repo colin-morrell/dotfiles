@@ -27,24 +27,25 @@ syntax on
 set nu
 colorscheme zenburn
 
+" Press F4 to toggle highlighting on/off, and show current value.
+:noremap <F4> :set hlsearch! hlsearch?<CR>
+
 " Shift key is hard
 :command Q q
 :command W w
 :command WQ wq
 :command Wq wq
 
+" Tabs? Spaces? Porque no los dos
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
+set autoindent
 set expandtab
 
 " Enable folding with the spacebar
 nnoremap <space> za
 
 au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
     \ set textwidth=99 |
-    \ set expandtab |
-    \ set autoindent |
     \ set fileformat=unix
