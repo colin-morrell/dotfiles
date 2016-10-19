@@ -10,6 +10,10 @@ alias updatedb="sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.l
 alias whattime='python ~/custom/whattime.py'
 alias honeycomb='python ~/custom/honeycomb.py'
 
+# workaround for tmux
+alias vi='TERM=screen-256color vi'
+alias vim='TERM=screen-256color vim'
+
 
 function ipgrab()
 {
