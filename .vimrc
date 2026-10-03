@@ -1,51 +1,390 @@
-set nocompatible              " required
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins (vundle)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
-" Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
+" all plugins go here
+""""""""""""""""""""""""""""""""
+" aesthetic stuff
+Plugin 'embark-theme/vim', { 'as': 'embark', 'branch': 'main' }
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" tmux
+Plugin 'christoomey/vim-tmux-navigator'
+
+" git (branch + hunk counts in airline section b)
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+
+" nerdtree
+Plugin 'preservim/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs.git'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" numbered tabs
+Plugin 'mkitt/tabline.vim'
+
+" python stuff
 Plugin 'tmhedberg/SimpylFold'
-Plugin 'nvie/vim-flake8'
-Plugin 'flazz/vim-colorschemes'
+Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'davidhalter/jedi-vim'
+
+" go stuff
+Plugin 'fatih/vim-go'
 
 
-" All of your Plugins must be added before the following line
+""""""""""""""""""""""""""""""""
+" initialize plugin system
+""""""""""""""""""""""""""""""""
+
 call vundle#end()            " required
 filetype plugin indent on    " required
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Basic stuff
-syntax on
-set nu
-colorscheme brogrammer
 
-" Press F4 to toggle highlighting on/off, and show current value.
-:noremap <F4> :set hlsearch! hlsearch?<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins/airline
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:airline_theme='embark'
 
-" Shift key is hard
+let g:airline_powerline_fonts = 1
+let g:airline_section_c = '%F'
+
+" hide empty sections (e.g. b outside git) instead of drawing bare separators
+let g:airline_skip_empty_sections = 1 
+"let g:airline_section_z = airline#section#create('%4l/%L,%3v')
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+" line number section: drop the default file percentage ('%p%%'), and show the column as '16℅' instead of '℅:16'
+" parts only exist after airline initializes, so build the section then
+function! AirlineSectionZ()
+    call airline#parts#define('colnr_suffix', {'raw': '%v' . "\u2105", 'accent': 'bold'})
+    let g:airline_section_z = airline#section#create(['windowswap', 'obsession', 'linenr', 'maxlinenr', 'colnr_suffix'])
+endfunction
+autocmd User AirlineAfterInit call AirlineSectionZ()
+
+" sections b and y background: embark green (terminal color 2, same as the tmux cpu/ram section)
+" applies to all active modes; inactive windows keep the theme's colors
+function! AirlineThemePatch(palette)
+    if g:airline_theme !=# 'embark'
+        return
+    endif
+    for mode in ['normal', 'insert', 'visual', 'replace']
+        for section in ['airline_b', 'airline_y']
+            if has_key(a:palette, mode) && has_key(a:palette[mode], section)
+                let a:palette[mode][section][1] = '#A1EFD3'
+                let a:palette[mode][section][3] = 2
+            endif
+        endfor
+    endfor
+endfunction
+let g:airline_theme_patch_func = 'AirlineThemePatch'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins/vim-tmux-navigator
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:tmux_navigator_no_mappings = 1
+" write current buffer, if changed, when navigating back to tmux
+let g:tmux_navigator_save_on_switch = 1
+" If the tmux window is zoomed, keep it zoomed when moving from Vim to another pane
+let g:tmux_navigator_preserve_zoom = 1
+
+noremap <silent> <Esc>[1;3D :<C-U>TmuxNavigateLeft<cr>
+noremap <silent> <Esc>[1;3B :<C-U>TmuxNavigateDown<cr>
+noremap <silent> <Esc>[1;3A :<C-U>TmuxNavigateUp<cr>
+noremap <silent> <Esc>[1;3C :<C-U>TmuxNavigateRight<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins/nerdtree
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:NERDTreeWinPos = "right"
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeIgnore = [
+    \ '\.pyc$', 
+    \ '__pycache__', 
+    \ '.DS_Store', 
+    \ '.CFUserTextEncoding', 
+    \ '.localized', 
+    \ 'wget-hsts', 
+    \ '.swp', 
+    \ '.zip', 
+    \ '.pkg',
+    \ '.autoenv_authorized',
+    \ '.lesshst',
+    \ '.rediscli_history',
+    \ '.viminfo',
+    \ '.vimrc.bak',
+    \ '.zcompdump*',
+    \ '.zprofile',
+\]
+let g:NERDTreeWinSize = 40
+let g:NERDTreeMinimalUI = 1
+
+" bookmarks
+let g:NERDTreeShowBookmarks = 1
+let g:NERDTreeBookmarksSort = 0
+let g:NERDTreeMarkBookmarks = 0
+
+nnoremap n :NERDTreeToggle<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins/nerdtree/vim-devicons
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:webdevicons_conceal_nerdtree_brackets = 1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins/nerdtree/vim-nerdtree-tabs
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" enabled by default:
+" g:nerdtree_tabs_no_startup_for_diff               --> do not start nerdtree in diff mode
+" g:nerdtree_tabs_smart_startup_focus               --> focus file if opening file, nerdtree if dir
+" g:nerdtree_tabs_open_on_new_tab                   --> open nerdtree in new tab if nerdtre was globally opened
+" g:nerdtree_tabs_meaningful_tab_names              --> unfocus nerdtree when leaving a tab
+" g:nerdtree_tabs_autoclose                         --> close tab if only remaining window is nerdtree
+" g:nerdtree_tabs_synchronize_view                  --> sync all nerdtree windows (scroll, cursor position)
+" g:nerdtree_tabs_synchronize_focus                 --> sync focus when switching windows
+" g:nerdtree_tabs_startup_cd                        --> cd into dir if called as cmd argument for vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:nerdtree_tabs_open_on_console_startup = 0 "   --> open nerdtree upon vim startup
+let g:nerdtree_tabs_focus_on_files = 1 "            --> always focus on file when switching tabs
+let g:nerdtree_tabs_autofind = 1 "                  --> auto find+select currently opened file in nerdtree
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> plugins/nerdtree/vim-nerdtree-syntax-highlight
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+
+let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
+let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
+
+" disable defaults to start
+let g:NERDTreeSyntaxDisableDefaultExtensions = 1
+let g:NERDTreeSyntaxDisableDefaultExactMatches = 1
+let g:NERDTreeSyntaxDisableDefaultPatternMatches = 1
+
+" enabled defaults
+let g:NERDTreeSyntaxEnabledExtensions = [
+    \ 'htm', 
+    \ 'html', 
+    \ 'js', 
+    \ 'json', 
+    \ 'markdown', 
+    \ 'md', 
+    \ 'py', 
+    \ 'sh',
+    \ 'vim',
+\]
+let g:NERDTreeSyntaxEnabledExactMatches = ['dockerfile', 'docker-compose.yml'] " enabled exact matches with default colors
+
+" these are the default colors for the embark theme
+let s:bg_dark = '100E23'
+let s:red = 'F48FB1'
+let s:green = 'A1EFD3'
+let s:yellow = 'FFE6B3'
+let s:blue = '91DDFF'
+let s:purple = 'D4BFFF'
+let s:cyan = '87DFEB'
+let s:norm = 'CBE3E7'
+let s:bg_bright = '585273'
+let s:dark_red = 'F02E6E'
+let s:dark_green = '62D196'
+let s:dark_yellow = 'F2B482'
+let s:dark_blue = '65B2FF'
+let s:dark_purple = 'A37ACC'
+let s:dark_cyan = '63F2F1'
+let s:norm_subtle = '8A889D'
+
+
+" these are general nerdtree settings but they make sense here
+"highlight NERDTreeHelp ctermfg=0
+"highlight NERDTreeBookmarksHeader ctermfg=16 ctermbg=4
+highlight NerdTreeBookmarkName ctermfg=4
+highlight NerdTreeBookmark ctermfg=0
+"highlight NERDTreeUp ctermfg=0
+highlight NERDTreeCWD ctermfg=0 ctermbg=2
+highlight NERDTreeDir ctermfg=2
+highlight NERDTreeDirSlash ctermfg=2
+
+" needed to avoid error
+let g:NERDTreeExtensionHighlightColor = {}
+let g:NERDTreeExactMatchHighlightColor = {}
+let g:NERDTreePatternMatchHighlightColor = {}
+
+" special config files
+let s:special_config = s:dark_cyan
+let g:NERDTreeExactMatchHighlightColor['.tmux.conf'] = s:special_config
+let g:NERDTreeExactMatchHighlightColor['.zshrc'] = s:special_config
+let g:NERDTreePatternMatchHighlightColor['.*vimrc.*'] = s:special_config
+let g:NERDTreeExtensionHighlightColor['conf'] = s:special_config
+
+" other config files
+let s:config = s:norm_subtle
+let g:NERDTreeExactMatchHighlightColor['.gitconfig'] = s:config
+let g:NERDTreeExactMatchHighlightColor['.gitignore'] = s:config
+let g:NERDTreeExactMatchHighlightColor['.zsh_history'] = s:config
+let g:NERDTreeExactMatchHighlightColor['.NERDTreeBookmarks'] = s:config
+let g:NERDTreeExtensionHighlightColor['cfg'] = s:config
+let g:NERDTreeExtensionHighlightColor['zsh'] = s:config
+
+" python
+let s:py_yellow = s:dark_yellow
+let g:NERDTreeExtensionHighlightColor['py'] = s:py_yellow
+let g:NERDTreeExactMatchHighlightColor['python'] = s:py_yellow
+"let g:NERDTreePatternMatchHighlightColor['*python/*'] = s:py_yellow
+
+" csv, json
+let g:NERDTreeExtensionHighlightColor['json'] = s:purple
+let g:NERDTreeExtensionHighlightColor['csv'] = s:cyan
+
+" defaults
+let s:default_folder = s:green
+let g:WebDevIconsDefaultFolderSymbolColor = s:default_folder
+
+let s:default_file = s:norm
+let g:WebDevIconsDefaultFileSymbolColor = s:default_file
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> general
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set history=500 " how many lines of history VIM has to remember
+set backspace=indent,eol,start
+
+" enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" shift key is hard
 :command Q q
 :command W w
 :command WQ wq
 :command Wq wq
 
-" Tabs? Spaces? Porque no los dos
+" when splitting, keep the current file in place
+set splitbelow
+set splitright
+
+
+" TODO: switch vim tabs with cmd+[numkey]
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> display/ui
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nu
+set wildmenu " turn on wild menu
+
+" ignore compiled files
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+    set wildignore+=.git\*,.hg\*,.svn\*
+else
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+set ruler " always show current position
+set cmdheight=1 " height of cmd bar
+set scrolloff=999 " keep window centered on cursor position
+
+set hlsearch " highlight search results
+set incsearch " makes search act like modern browsers
+
+set showtabline=2 " always show tab menu
+
+" TODO: when opening vim without a file --> show just nerdtree?
+" TODO: make tabs behave like chrome (fill all available space)
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> display/colors-fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set t_Co=256
+"set termguicolors
+syntax enable
+
+hi Visual ctermbg=LightCyan ctermfg=Black
+
+"try
+"colorscheme embark
+"catch
+"endtry
+
+"set background=dark
+
+set encoding=utf8 " set utf8 as standard encoding and en_US as the standard language
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> display/text
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" tabs --> spaces
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set autoindent
 set expandtab
+set smarttab
 
-" Enable folding with the spacebar
-nnoremap <space> za
 
 au BufNewFile,BufRead *.py
-    \ set textwidth=99 |
+    \ set textwidth=100 |
     \ set fileformat=unix
+
+
+""""""""""""""""""""""""""""""
+" --> display/status-line
+""""""""""""""""""""""""""""""
+set laststatus=2 " always show the status line
+
+
+""""""""""""""""""""""""""""""
+" --> languages/python
+""""""""""""""""""""""""""""""
+let python_highlight_all = 1
+au FileType python syn keyword pythonDecorator True None False self
+au FileType python set colorcolumn=100
+
+au FileType python map <buffer> F :set foldmethod=indent<cr>
+
+au FileType python inoremap <buffer> $r return 
+au FileType python inoremap <buffer> $i import 
+au FileType python inoremap <buffer> $p print 
+au FileType python inoremap <buffer> $f # --- <esc>a
+au FileType python map <buffer> <leader>1 /class 
+au FileType python map <buffer> <leader>2 /def 
+au FileType python map <buffer> <leader>C ?class 
+au FileType python map <buffer> <leader>D ?def 
+
+nnoremap <space> za " enable folding with the spacebar
+let g:SimpylFold_docstring_preview=1
+
+" Press F4 to toggle highlighting on/off, and show current value.
+":noremap <F4> :set hlsearch! hlsearch?<CR>
