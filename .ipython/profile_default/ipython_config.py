@@ -1,8 +1,19 @@
 import IPython
-from IPython.core.ultratb import VerboseTB
 
-# change traceback highlighting from unreadable yellow to red
-VerboseTB.tb_highlight = 'bg:#F48FB1'
+# change traceback highlighting from unreadable yellow to red (embark red)
+TB_HIGHLIGHT = 'bg:#F48FB1'
+try:
+    # ipython 9+: the highlight is part of each color theme
+    from IPython.utils.PyColorize import theme_table
+    from pygments.token import Token
+except ImportError:
+    # ipython 8: class attribute, renamed with a leading underscore in later 8.x
+    from IPython.core.ultratb import VerboseTB
+    VerboseTB.tb_highlight = VerboseTB._tb_highlight = TB_HIGHLIGHT
+else:
+    for name, theme in theme_table.items():
+        if name != 'nocolor':
+            theme.extra_style[Token.TbHighlight] = 'ansiblack ' + TB_HIGHLIGHT
 
 # autoreload
 c.InteractiveShellApp.exec_lines = []
