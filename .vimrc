@@ -1,5 +1,5 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins (vundle)
+" --> PLUGINS (VUNDLE)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -52,7 +52,7 @@ filetype plugin indent on    " required
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins/airline
+" --> PLUGINS/AIRLINE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline_theme='embark'
 
@@ -103,7 +103,7 @@ let g:airline_theme_patch_func = 'AirlineThemePatch'
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins/vim-tmux-navigator
+" --> PLUGINS/VIM-TMUX-NAVIGATOR
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:tmux_navigator_no_mappings = 1
 " write current buffer, if changed, when navigating back to tmux
@@ -118,7 +118,7 @@ noremap <silent> <Esc>[1;3C :<C-U>TmuxNavigateRight<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins/nerdtree
+" --> PLUGINS/NERDTREE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:NERDTreeWinPos = "right"
 let g:NERDTreeShowHidden = 1
@@ -152,13 +152,13 @@ nnoremap n :NERDTreeToggle<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins/nerdtree/vim-devicons
+" --> PLUGINS/NERDTREE/VIM-DEVICONS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:webdevicons_conceal_nerdtree_brackets = 1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins/nerdtree/vim-nerdtree-tabs
+" --> PLUGINS/NERDTREE/VIM-NERDTREE-TABS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " enabled by default:
 " g:nerdtree_tabs_no_startup_for_diff               --> do not start nerdtree in diff mode
@@ -176,7 +176,7 @@ let g:nerdtree_tabs_autofind = 1 "                  --> auto find+select current
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> plugins/nerdtree/vim-nerdtree-syntax-highlight
+" --> PLUGINS/NERDTREE/VIM-NERDTREE-SYNTAX-HIGHLIGHT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
@@ -273,7 +273,7 @@ let g:WebDevIconsDefaultFileSymbolColor = s:default_file
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> general
+" --> GENERAL
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set history=500 " how many lines of history VIM has to remember
 set backspace=indent,eol,start
@@ -292,12 +292,19 @@ filetype indent on
 set splitbelow
 set splitright
 
-
-" TODO: switch vim tabs with cmd+[numkey]
+" follow symlinks to preserve fugitive/gitgutter functionality 
+function! s:FollowSymlink()
+    let l:path = expand('%:p')
+    if getftype(l:path) ==# 'link'
+        execute 'silent! file ' . fnameescape(resolve(l:path))
+        edit
+    endif
+endfunction
+autocmd BufReadPost * ++nested call s:FollowSymlink()
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> display/ui
+" --> DISPLAY/UI
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nu
 set wildmenu " turn on wild menu
@@ -319,12 +326,9 @@ set incsearch " makes search act like modern browsers
 
 set showtabline=2 " always show tab menu
 
-" TODO: when opening vim without a file --> show just nerdtree?
-" TODO: make tabs behave like chrome (fill all available space)
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> display/colors-fonts
+" --> DISPLAY/COLORS-FONTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256
 "set termguicolors
@@ -343,7 +347,7 @@ set encoding=utf8 " set utf8 as standard encoding and en_US as the standard lang
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> display/text
+" --> DISPLAY/TEXT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tabs --> spaces
 set tabstop=4
@@ -360,13 +364,13 @@ au BufNewFile,BufRead *.py
 
 
 """"""""""""""""""""""""""""""
-" --> display/status-line
+" --> DISPLAY/STATUS-LINE
 """"""""""""""""""""""""""""""
 set laststatus=2 " always show the status line
 
 
 """"""""""""""""""""""""""""""
-" --> languages/python
+" --> LANGUAGES/PYTHON
 """"""""""""""""""""""""""""""
 let python_highlight_all = 1
 au FileType python syn keyword pythonDecorator True None False self
