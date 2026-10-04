@@ -3,7 +3,9 @@
 export PATH=$PATH:~/custom
 
 
-########## LS_COLORS ##########
+###############################################################
+# --> LS_COLORS
+###############################################################
 
 #  dir --> bold cyan
 #  swp --> norm darkgrey
@@ -14,7 +16,10 @@ LS_COLORS='di=1;92:ow=1;92:ex=0;37;41:*.swp=0;90:*.py=0;95:*.json=0;96:*.csv=0;9
 export LS_COLORS
 
 
-########## ZSH STUFF ##########
+###############################################################
+# --> ZSH STUFF
+###############################################################
+
 # use LS_COLORS for zsh tab completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
@@ -23,12 +28,12 @@ ZLE_REMOVE_SUFFIX_CHARS=$' \t\n;&'
 # reload zsh without breaking p10k
 alias reload='clear && exec zsh'
 
-########## ALIASES ##########
 
-# GENERAL
-#alias ls='gls -ah --color --group-directories-first'
-#alias ll='gls -lah --color --group-directories-first'
+###############################################################
+# --> ALIASES
+###############################################################
 
+##### GENERAL #####
 alias ls='ls -ah --color --group-directories-first'
 alias ll='ls -lah --color --group-directories-first'
 alias pbcopy='powershell.exe -Command "Set-Clipboard -Value \$input"'
@@ -45,7 +50,7 @@ alias whattime='python ~/custom/whattime.py'
 # enable exact (24-bit) theme colors inside tmux
 alias claude='COLORTERM=truecolor claude'  
 
-# CONFIGS
+##### CONFIGS #####
 alias ahkcfg='vi /mnt/e/scripts/custom.ahk'
 alias glazecfg='vi /mnt/c/users/colin/.glzr/glazewm/config.yaml'
 alias ipycfg='vi /home/colin/.ipython/profile_default/ipython_config.py'
@@ -53,17 +58,19 @@ alias mmod='vi /home/colin/custom/.morrell_mods.sh'
 alias tmuxcfg='vi /home/colin/.tmux.conf'
 alias vimcfg='vi /home/colin/.vimrc'
 
-# CD SHORTCUTS
+##### CD SHORTCUTS #####
 alias cd3dp='cd /mnt/e/3dp/'
 alias 3dpy='cd /home/colin/3dp/3dpy'
 alias 3dipy='3dpy && poetry env activate && poetry run -v ipython'
 
-# PYTHON
+##### PYTHON #####
 alias flake8='flake8 --max-line-length 99 --extend-ignore=W605'
 alias ipython="clear && python3 -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
 
 
-########## FUNCTIONS ##########
+###############################################################
+# --> FUNCTIONS
+###############################################################
 
 function ipgrab()
 {
