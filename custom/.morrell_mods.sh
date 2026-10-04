@@ -65,7 +65,7 @@ alias 3dipy='3dpy && poetry env activate && poetry run -v ipython'
 
 ##### PYTHON #####
 alias flake8='flake8 --max-line-length 99 --extend-ignore=W605'
-alias ipython="clear && python3 -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
+alias ipython="clear && ~/.local/bin/ipython"  # pipx install (pipx upgrade ipython)
 
 
 ###############################################################
