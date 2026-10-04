@@ -76,7 +76,8 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-" line number section: drop the default file percentage ('%p%%'), and show the column as '16℅' instead of '℅:16'
+" line number section: drop default file percentage ('%p%%')
+" show the column as '16℅' instead of '℅:16'
 " parts only exist after airline initializes, so build the section then
 function! AirlineSectionZ()
     call airline#parts#define('colnr_suffix', {'raw': '%v' . "\u2105", 'accent': 'bold'})
@@ -84,7 +85,7 @@ function! AirlineSectionZ()
 endfunction
 autocmd User AirlineAfterInit call AirlineSectionZ()
 
-" sections b and y background: embark green (terminal color 2, same as the tmux cpu/ram section)
+" sections b and y background: 2/embark green (same as tmux cpu/ram section)
 " applies to all active modes; inactive windows keep the theme's colors
 function! AirlineThemePatch(palette)
     if g:airline_theme !=# 'embark'
@@ -103,12 +104,18 @@ let g:airline_theme_patch_func = 'AirlineThemePatch'
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> PLUGINS/JEDI
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let jedi#show_call_signatures = 0
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " --> PLUGINS/VIM-TMUX-NAVIGATOR
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:tmux_navigator_no_mappings = 1
 " write current buffer, if changed, when navigating back to tmux
 let g:tmux_navigator_save_on_switch = 1
-" If the tmux window is zoomed, keep it zoomed when moving from Vim to another pane
+" If the tmux window is zoomed, keep it zoomed when moving from vim to another pane
 let g:tmux_navigator_preserve_zoom = 1
 
 noremap <silent> <Esc>[1;3D :<C-U>TmuxNavigateLeft<cr>
@@ -292,12 +299,21 @@ filetype indent on
 set splitbelow
 set splitright
 
-" follow symlinks to preserve fugitive/gitgutter functionality 
+" follow symlinks to preserve git tracking (fugitive/gitgutter)
 function! s:FollowSymlink()
+    " full path of current buffer as opened (e.g. ~/.vimrc)
     let l:path = expand('%:p')
     if getftype(l:path) ==# 'link'
+        " rename buffer to symlink's real path (e.g. ~/dotfiles/.vimrc)
+        " so plugins see git repo
         execute 'silent! file ' . fnameescape(resolve(l:path))
         edit
+        " gitgutter disables a buffer when it's renamed (:file above)
+        " unless it was already enabled. rename happens on BufReadPost,
+        " before gitgutter's first BufEnter has enabled it, so re-enable it here
+        if exists(':GitGutterBufferEnable')
+            GitGutterBufferEnable
+        endif
     endif
 endfunction
 autocmd BufReadPost * ++nested call s:FollowSymlink()
@@ -353,6 +369,20 @@ syntax enable
 " 15  #D4BFFF  brightWhite (actually purple, original #8A889D; changed in winterminal settings.json)
 hi Visual ctermbg=7 ctermfg=Black
 hi Comment ctermfg=8
+
+" fun fact: when painting the cell under a block cursor, winterminal draws the
+" foreground (i.e. the character itself) using the cell's *background* color.
+"
+" then, when it detects foreground and background are the same, it darkens the
+" cursor background.
+"
+" this means the only way to get matching paren highlighting is to modify vim
+" to not highlight the paren under the cursor, and to set MatchParen to match
+" your cursor color.
+"
+" because that's some bullshit --> set it to a green that's a closeish match
+" to my cursor green (they will match when you switch panes in tmux)
+hi MatchParen ctermbg=10 ctermfg=Black " match cursorColor (#A1EFD3) in winterminal settings.json
 
 set encoding=utf8 " set utf8 as standard encoding and en_US as the standard language
 
