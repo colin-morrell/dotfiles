@@ -334,14 +334,25 @@ set t_Co=256
 "set termguicolors
 syntax enable
 
-hi Visual ctermbg=LightCyan ctermfg=Black
-
-"try
-"colorscheme embark
-"catch
-"endtry
-
-"set background=dark
+" embark theme colors
+"  0  #1E1C31  black
+"  1  #F48FB1  red
+"  2  #A1EFD3  green
+"  3  #FFE6B3  yellow
+"  4  #91DDFF  blue
+"  5  #D4BFFF  purple
+"  6  #87DFEB  cyan
+"  7  #CBE3E7  white
+"  8  #585273  brightBlack
+"  9  #F02E6E  brightRed
+" 10  #62D196  brightGreen
+" 11  #F2B482  brightYellow
+" 12  #65B2FF  brightBlue
+" 13  #A37ACC  brightPurple
+" 14  #63F2F1  brightCyan
+" 15  #D4BFFF  brightWhite (actually purple, original #8A889D; changed in winterminal settings.json)
+hi Visual ctermbg=7 ctermfg=Black
+hi Comment ctermfg=8
 
 set encoding=utf8 " set utf8 as standard encoding and en_US as the standard language
 
