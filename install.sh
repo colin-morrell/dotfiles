@@ -20,6 +20,7 @@ FILES=(
     .ipython/profile_default/ipython_config.py
     .ipython/profile_default/startup/10-logging-colors.py
     .ipython/profile_default/startup/20-rich-pretty.py
+    .vim/after/syntax/python.vim
 )
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

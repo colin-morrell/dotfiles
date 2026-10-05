@@ -280,24 +280,8 @@ let g:WebDevIconsDefaultFileSymbolColor = s:default_file
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> GENERAL
+" --> PLUGINS/GIT-TRACKING (FUGITIVE & GITGUTTER)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set history=500 " how many lines of history VIM has to remember
-set backspace=indent,eol,start
-
-" enable filetype plugins
-filetype plugin on
-filetype indent on
-
-" shift key is hard
-:command Q q
-:command W w
-:command WQ wq
-:command Wq wq
-
-" when splitting, keep the current file in place
-set splitbelow
-set splitright
 
 " follow symlinks to preserve git tracking (fugitive/gitgutter)
 function! s:FollowSymlink()
@@ -317,6 +301,55 @@ function! s:FollowSymlink()
     endif
 endfunction
 autocmd BufReadPost * ++nested call s:FollowSymlink()
+
+" less delay for gitgutter to appear
+set updatetime=100
+
+
+""""""""""""""""""""""""""""""
+" --> LANGUAGES/PYTHON
+""""""""""""""""""""""""""""""
+let python_highlight_all = 1
+au FileType python set colorcolumn=100
+
+au FileType python map <buffer> F :set foldmethod=indent<cr>
+
+au FileType python inoremap <buffer> $r return 
+au FileType python inoremap <buffer> $i import 
+au FileType python inoremap <buffer> $p print 
+au FileType python inoremap <buffer> $f # --- <esc>a
+au FileType python map <buffer> <leader>1 /class 
+au FileType python map <buffer> <leader>2 /def 
+au FileType python map <buffer> <leader>C ?class 
+au FileType python map <buffer> <leader>D ?def 
+
+nnoremap <space> za " enable folding with the spacebar
+let g:SimpylFold_docstring_preview=1
+
+" Press F4 to toggle highlighting on/off, and show current value.
+":noremap <F4> :set hlsearch! hlsearch?<CR>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> GENERAL
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set history=500 " how many lines of history VIM has to remember
+set backspace=indent,eol,start
+
+" enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" shift key is hard
+:command Q q
+:command W w
+:command WQ wq
+:command Wq wq
+
+" when splitting, keep the current file in place
+set splitbelow
+set splitright
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -344,7 +377,7 @@ set showtabline=2 " always show tab menu
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" --> DISPLAY/COLORS-FONTS
+" --> DISPLAY/COLORS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256
 "set termguicolors
@@ -367,8 +400,12 @@ syntax enable
 " 13  #A37ACC  brightPurple
 " 14  #63F2F1  brightCyan
 " 15  #D4BFFF  brightWhite (actually purple, original #8A889D; changed in winterminal settings.json)
-hi Visual ctermbg=7 ctermfg=Black
+
 hi Comment ctermfg=8
+hi Error ctermfg=Black ctermbg=1
+hi ErrorMsg ctermfg=Black
+hi Visual ctermfg=Black ctermbg=5 
+hi LineNr ctermfg=8
 
 " fun fact: when painting the cell under a block cursor, winterminal draws the
 " foreground (i.e. the character itself) using the cell's *background* color.
@@ -383,6 +420,14 @@ hi Comment ctermfg=8
 " because that's some bullshit --> set it to a green that's a closeish match
 " to my cursor green (they will match when you switch panes in tmux)
 hi MatchParen ctermbg=10 ctermfg=Black " match cursorColor (#A1EFD3) in winterminal settings.json
+
+" gitgutter: no colorscheme is loaded, so vim's defaults give the sign column a light grey
+" background (ctermbg=248) and leave the + sign with no color. use the terminal background
+" and embark green/yellow/red. gitgutter keeps these since they set a foreground color
+hi SignColumn ctermbg=NONE
+hi GitGutterAdd ctermfg=2 ctermbg=NONE
+hi GitGutterChange ctermfg=3 ctermbg=NONE
+hi GitGutterDelete ctermfg=1 ctermbg=NONE
 
 set encoding=utf8 " set utf8 as standard encoding and en_US as the standard language
 
@@ -410,26 +455,3 @@ au BufNewFile,BufRead *.py
 set laststatus=2 " always show the status line
 
 
-""""""""""""""""""""""""""""""
-" --> LANGUAGES/PYTHON
-""""""""""""""""""""""""""""""
-let python_highlight_all = 1
-au FileType python syn keyword pythonDecorator True None False self
-au FileType python set colorcolumn=100
-
-au FileType python map <buffer> F :set foldmethod=indent<cr>
-
-au FileType python inoremap <buffer> $r return 
-au FileType python inoremap <buffer> $i import 
-au FileType python inoremap <buffer> $p print 
-au FileType python inoremap <buffer> $f # --- <esc>a
-au FileType python map <buffer> <leader>1 /class 
-au FileType python map <buffer> <leader>2 /def 
-au FileType python map <buffer> <leader>C ?class 
-au FileType python map <buffer> <leader>D ?def 
-
-nnoremap <space> za " enable folding with the spacebar
-let g:SimpylFold_docstring_preview=1
-
-" Press F4 to toggle highlighting on/off, and show current value.
-":noremap <F4> :set hlsearch! hlsearch?<CR>
