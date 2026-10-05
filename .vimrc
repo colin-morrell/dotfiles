@@ -41,14 +41,11 @@ Plugin 'davidhalter/jedi-vim'
 
 " go stuff
 Plugin 'fatih/vim-go'
-
-
-""""""""""""""""""""""""""""""""
-" initialize plugin system
 """"""""""""""""""""""""""""""""
 
-call vundle#end()            " required
-filetype plugin indent on    " required
+" initialize plugin system (both required)
+call vundle#end()
+filetype plugin indent on
 
 " per-plugin settings, one file each in ~/.vim/config. sourced here rather than auto-loaded
 " from ~/.vim/plugin, since some (e.g. jedi) must be set before `syntax enable` below
@@ -77,6 +74,15 @@ au FileType python map <buffer> <leader>D ?def
 " enable folding with the spacebar
 " future me: if all your folds get closed again you're looking for zr
 nnoremap <space> za 
+
+" remember which folds are open/closed (and the cursor position) per file. saved when the
+" file leaves its window, restored when it's opened again. views live in ~/.vim/view
+set viewoptions=folds,cursor
+augroup remember_folds
+    au!
+    au BufWinLeave ?* if &buftype ==# '' | silent! mkview | endif
+    au BufWinEnter ?* if &buftype ==# '' | silent! loadview | endif
+augroup END
 
 " Press F4 to toggle highlighting on/off, and show current value.
 ":noremap <F4> :set hlsearch! hlsearch?<CR>
@@ -162,6 +168,9 @@ hi Error ctermfg=Black ctermbg=1
 hi ErrorMsg ctermfg=Black
 hi Visual ctermbg=5 
 hi LineNr ctermfg=8
+
+" closed folds (all filetypes). currently vim's defaults: 1/red text on 7/white
+hi Folded ctermfg=Black ctermbg=8
 
 " fun fact: when painting the cell under a block cursor, winterminal draws the
 " foreground (i.e. the character itself) using the cell's *background* color.
