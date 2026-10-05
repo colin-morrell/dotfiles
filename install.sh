@@ -21,6 +21,15 @@ FILES=(
     .ipython/profile_default/startup/10-logging-colors.py
     .ipython/profile_default/startup/20-rich-pretty.py
     .vim/after/syntax/python.vim
+    .vim/config/airline.vim
+    .vim/config/devicons.vim
+    .vim/config/git.vim
+    .vim/config/jedi.vim
+    .vim/config/nerdtree.vim
+    .vim/config/nerdtree-syntax-highlight.vim
+    .vim/config/nerdtree-tabs.vim
+    .vim/config/simpylfold.vim
+    .vim/config/tmux-navigator.vim
 )
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
