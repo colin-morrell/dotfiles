@@ -28,7 +28,7 @@
 " --> GROUPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " True/None/False/self -> pythonDecorator
-syn keyword pythonDecorator True None False
+syn keyword pythonDecorator True None False self
 
 " open -> pythonFunction instead of pythonBuiltin. keywords defined later win
 syn keyword pythonFunction open
