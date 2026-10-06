@@ -45,19 +45,22 @@ syn match pythonClass "\<\u\w*\l\w*\>" display
 " any name after `class`, even lowercase. defined last so it wins at the same position
 syn match pythonClass "\%(\<class\s\+\)\@<=\h\w*" display
 
-" symbol operators -> pythonMathOperator (builtin leaves them unhighlighted)
-" longest first since vim takes first matching alternative
-" @ is left out so decorators keep pythonDecoratorName
-" : is left out so slices/dict colons stay plain (not incl :=)
-syn match pythonMathOperator "->\|\*\*=\=\|//=\=\|<<=\=\|>>=\=\|[-+*/%&|^<>!=:]=\|[-+*/%&|^~<>=]" display
+" ALL_CAPS constants (CONFIG_PATH, Shape.ROUND): 2+ chars of uppercase/digits/underscores
+syn match pythonConstant "\<\u[A-Z0-9_]\+\>" display
+
+" symbol operators without = -> pythonMathOperator (builtin leaves them unhighlighted)
+" anything with = (=, ==, +=, :=...) and -> stays regular text, @ stays a decorator
+" only matches when not touching another operator char, so the + in += stays plain
+syn match pythonMathOperator "[-+*/%&|^~<>!=]\@<!\%(\*\*\|//\|<<\|>>\|[-+*/%&|^~<>]\)[-+*/%&|^~<>!=:]\@!" display
 
 " attribute access -> pythonAttribute (self.depth, Align.CENTER)
 " builtin pythonAttribute is transparent/can't be colored --> redefine it
 " match starts at dot (hs=s+1 leaves the dot plain) to beats keywords like x.type
 " names followed by ( are method calls --> skipped
 " dotted module paths on import lines --> skipped
+" ALL_CAPS names --> skipped (pythonConstant)
 syn clear pythonAttribute
-syn match pythonAttribute "\%(^\s*\%(from\s\+\%(\w\|\.\)*\|import\s\+\%(\w\|[., \t]\)*\)\)\@<!\.\h\w*\>\%(\s*(\)\@!"hs=s+1 display
+syn match pythonAttribute "\%(^\s*\%(from\s\+\%(\w\|\.\)*\|import\s\+\%(\w\|[., \t]\)*\)\)\@<!\.\%(\u[A-Z0-9_]\+\>\)\@!\h\w*\>\%(\s*(\)\@!"hs=s+1 display
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " --> HIGHLIGHTING
@@ -75,11 +78,14 @@ hi pythonRepeat ctermfg=5
 " and, or, not, in, is
 hi pythonOperator ctermfg=12
 
-" + - * / // % ** = == != < > <= >= & | ^ ~ << >> += := -> ...
+" + - * / // % ** < > << >> & | ^ ~ (not =, ==, +=, ->, etc.)
 hi pythonMathOperator ctermfg=12
 
 " attribute access after a dot: self.depth, Align.CENTER (not definitions or method calls)
 hi pythonAttribute ctermfg=12
+
+" ALL_CAPS constants: CONFIG_PATH, Shape.ROUND
+hi pythonConstant ctermfg=12
 
 " try, except, finally, raise
 hi pythonException ctermfg=1
