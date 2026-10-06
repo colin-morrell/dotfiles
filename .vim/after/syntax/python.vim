@@ -53,14 +53,13 @@ syn match pythonConstant "\<\u[A-Z0-9_]\+\>" display
 " only matches when not touching another operator char, so the + in += stays plain
 syn match pythonMathOperator "[-+*/%&|^~<>!=]\@<!\%(\*\*\|//\|<<\|>>\|[-+*/%&|^~<>]\)[-+*/%&|^~<>!=:]\@!" display
 
-" attribute access -> pythonAttribute (self.depth, Align.CENTER)
+" attribute access + method calls -> pythonAttribute (self.depth, os.path.join())
 " builtin pythonAttribute is transparent/can't be colored --> redefine it
 " match starts at dot (hs=s+1 leaves the dot plain) to beats keywords like x.type
-" names followed by ( are method calls --> skipped
 " dotted module paths on import lines --> skipped
 " ALL_CAPS names --> skipped (pythonConstant)
 syn clear pythonAttribute
-syn match pythonAttribute "\%(^\s*\%(from\s\+\%(\w\|\.\)*\|import\s\+\%(\w\|[., \t]\)*\)\)\@<!\.\%(\u[A-Z0-9_]\+\>\)\@!\h\w*\>\%(\s*(\)\@!"hs=s+1 display
+syn match pythonAttribute "\%(^\s*\%(from\s\+\%(\w\|\.\)*\|import\s\+\%(\w\|[., \t]\)*\)\)\@<!\.\%(\u[A-Z0-9_]\+\>\)\@!\h\w*\>"hs=s+1 display
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " --> HIGHLIGHTING
@@ -81,7 +80,7 @@ hi pythonOperator ctermfg=12
 " + - * / // % ** < > << >> & | ^ ~ (not =, ==, +=, ->, etc.)
 hi pythonMathOperator ctermfg=12
 
-" attribute access after a dot: self.depth, Align.CENTER (not definitions or method calls)
+" names after a dot: self.depth, os.path.join(), json.load() (not definitions)
 hi pythonAttribute ctermfg=12
 
 " ALL_CAPS constants: CONFIG_PATH, Shape.ROUND
@@ -109,7 +108,7 @@ hi pythonClass ctermfg=11
 hi pythonFunction ctermfg=13
 
 " str, int, len, print, range, dict...
-hi pythonBuiltin ctermfg=7
+hi pythonBuiltin ctermfg=13
 
 " ValueError, KeyError, Exception...
 hi pythonExceptions ctermfg=13
