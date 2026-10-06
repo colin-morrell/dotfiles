@@ -27,6 +27,9 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
 
 ## Code style
 - Single-line comments go on their own line above the code they describe, not inline at the end of the line.
+- In comments that start with `"` (vim), quote things inside the comment with single quotes, e.g. `" object keys: 'key'`.
+- Prefer single quotes in general (strings, shell args, comments) wherever the language allows them and they don't change meaning.
+- YAML: indent with 4 spaces per level.
 - Keep code comments short: what the code does plus the one fact needed to see why. No narrating mechanisms or history; aim for 1-2 lines, e.g.
   ```vim
   1  " apply hi changes above right away for startup messages e.g. E325 (swap file warning)
