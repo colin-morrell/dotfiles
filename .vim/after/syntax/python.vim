@@ -1,6 +1,16 @@
 " sourced after vim's built-in syntax/python.vim every time it loads (including
 " reloads from :so ~/.vimrc), so everything here survives the syntax file's syn clear.
 " python_highlight_all stays in ~/.vimrc since it has to be set before the syntax file loads
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" --> DESCRIPTION
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" mostly based on github's syntax highlighting. differences:
+" --> math operators and [=, :=, ->, etc] stay white
+" --> builtins are dark purp
+" --> True/False/None/self are light purp
+" --> TODOs are highlighted (purp)
+" --> decorators (incl @) are light purp for slight contrast
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " --> PALETTE
@@ -78,7 +88,7 @@ hi pythonRepeat ctermfg=5
 hi pythonOperator ctermfg=12
 
 " + - * / // % ** < > << >> & | ^ ~ (not =, ==, +=, ->, etc.)
-hi pythonMathOperator ctermfg=12
+hi pythonMathOperator ctermfg=7
 
 " names after a dot: self.depth, os.path.join(), json.load() (not definitions)
 hi pythonAttribute ctermfg=12
