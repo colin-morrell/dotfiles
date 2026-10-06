@@ -30,6 +30,9 @@
 " True/None/False/self -> pythonDecorator
 syn keyword pythonDecorator True None False
 
+" open -> pythonFunction instead of pythonBuiltin. keywords defined later win
+syn keyword pythonFunction open
+
 " class names -> pythonClass (built-in sends both def and class names to pythonFunction).
 " redefine `class` without nextgroup=pythonFunction, then match class names. not
 " `contained`, since several built-in regions use contains=ALLBUT and would pick it up
@@ -42,16 +45,19 @@ syn match pythonClass "\<\u\w*\l\w*\>" display
 " any name after `class`, even lowercase. defined last so it wins at the same position
 syn match pythonClass "\%(\<class\s\+\)\@<=\h\w*" display
 
-" symbol operators -> pythonMathOperator (built-in leaves them unhighlighted). longest first,
-" since vim takes the first alternative that matches. @ is left out so decorators keep
-" pythonDecoratorName; a lone : is left out so slices/dict colons stay plain
+" symbol operators -> pythonMathOperator (builtin leaves them unhighlighted)
+" longest first since vim takes first matching alternative
+" @ is left out so decorators keep pythonDecoratorName
+" : is left out so slices/dict colons stay plain (not incl :=)
 syn match pythonMathOperator "->\|\*\*=\=\|//=\=\|<<=\=\|>>=\=\|[-+*/%&|^<>!=:]=\|[-+*/%&|^~<>=]" display
 
-" attribute access -> pythonAttribute (self.depth, Align.CENTER). built-in pythonAttribute is
-" transparent, so it can't be colored; redefine it. the match starts at the dot (hs=s+1 leaves
-" the dot plain) so it beats keywords like x.type. names followed by ( are method calls, skipped
+" attribute access -> pythonAttribute (self.depth, Align.CENTER)
+" builtin pythonAttribute is transparent/can't be colored --> redefine it
+" match starts at dot (hs=s+1 leaves the dot plain) to beats keywords like x.type
+" names followed by ( are method calls --> skipped
+" dotted module paths on import lines --> skipped
 syn clear pythonAttribute
-syn match pythonAttribute "\.\h\w*\>\%(\s*(\)\@!"hs=s+1 display
+syn match pythonAttribute "\%(^\s*\%(from\s\+\%(\w\|\.\)*\|import\s\+\%(\w\|[., \t]\)*\)\)\@<!\.\h\w*\>\%(\s*(\)\@!"hs=s+1 display
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " --> HIGHLIGHTING
