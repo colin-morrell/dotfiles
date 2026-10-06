@@ -30,6 +30,7 @@ FILES=(
     .vim/config/nerdtree-tabs.vim
     .vim/config/simpylfold.vim
     .vim/config/tmux-navigator.vim
+    .vim/autoload/airline/extensions/default.vim
 )
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

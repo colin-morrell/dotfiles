@@ -62,18 +62,18 @@ au FileType python set colorcolumn=100
 
 au FileType python map <buffer> F :set foldmethod=indent<cr>
 
-au FileType python inoremap <buffer> $r return 
-au FileType python inoremap <buffer> $i import 
-au FileType python inoremap <buffer> $p print 
+au FileType python inoremap <buffer> $r return
+au FileType python inoremap <buffer> $i import
+au FileType python inoremap <buffer> $p print
 au FileType python inoremap <buffer> $f # --- <esc>a
-au FileType python map <buffer> <leader>1 /class 
-au FileType python map <buffer> <leader>2 /def 
-au FileType python map <buffer> <leader>C ?class 
-au FileType python map <buffer> <leader>D ?def 
+au FileType python map <buffer> <leader>1 /class
+au FileType python map <buffer> <leader>2 /def
+au FileType python map <buffer> <leader>C ?class
+au FileType python map <buffer> <leader>D ?def
 
 " enable folding with the spacebar
 " future me: if all your folds get closed again you're looking for zr
-nnoremap <space> za 
+nnoremap <space> za
 
 " remember which folds are open/closed (and the cursor position) per file. saved when the
 " file leaves its window, restored when it's opened again. views live in ~/.vim/view
@@ -108,7 +108,6 @@ filetype indent on
 " when splitting, keep the current file in place
 set splitbelow
 set splitright
-
 
 " show highlighting group (if any) of the cell under the cursor
 :command Hi echo synIDattr(synID(line('.'), col('.'), 1), 'name')
@@ -166,11 +165,16 @@ syntax enable
 hi Comment ctermfg=8
 hi Error ctermfg=Black ctermbg=1
 hi ErrorMsg ctermfg=Black
-hi Visual ctermbg=5 
+hi Visual ctermfg=Black ctermbg=13
 hi LineNr ctermfg=8
 
-" closed folds (all filetypes). currently vim's defaults: 1/red text on 7/white
+" closed folds (all filetypes)
 hi Folded ctermfg=Black ctermbg=8
+
+" all matches
+hi Search ctermfg=Black ctermbg=13
+" matches while typing a search
+hi IncSearch cterm=NONE ctermfg=Black ctermbg=13
 
 " fun fact: when painting the cell under a block cursor, winterminal draws the
 " foreground (i.e. the character itself) using the cell's *background* color.
@@ -184,9 +188,14 @@ hi Folded ctermfg=Black ctermbg=8
 "
 " because that's some bullshit --> set it to a green that's a closeish match
 " to my cursor green (they will match when you switch panes in tmux)
-hi MatchParen ctermbg=10 ctermfg=Black " match cursorColor (#A1EFD3) in winterminal settings.json
+hi MatchParen ctermbg=10 ctermfg=Black
 
-set encoding=utf8 " set utf8 as standard encoding and en_US as the standard language
+" apply hi changes above right away for startup messages e.g. E325 (swap file warning)
+" otherwise they're drawn with default colors (white on red ErrorMsg)
+set highlight&
+
+" set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8 
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -209,6 +218,13 @@ au BufNewFile,BufRead *.py
 """"""""""""""""""""""""""""""
 " --> DISPLAY/STATUS-LINE
 """"""""""""""""""""""""""""""
-set laststatus=2 " always show the status line
+" 0 --> never show
+" 1 --> show only with >1 window
+" 2 --> always show (airline needs this)
+" 3 --> always show one per instance (vs one per window)
+set laststatus=2
+
+" hide status line mode since airline shows it
+set noshowmode
 
 
