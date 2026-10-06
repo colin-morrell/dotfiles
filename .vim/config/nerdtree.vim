@@ -20,6 +20,7 @@ let g:NERDTreeIgnore = [
     \ '.vimrc.bak',
     \ '.zcompdump*',
     \ '.zprofile',
+    \ '\.stl$',
 \]
 let g:NERDTreeWinSize = 40
 let g:NERDTreeMinimalUI = 1

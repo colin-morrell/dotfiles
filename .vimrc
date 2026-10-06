@@ -80,7 +80,8 @@ nnoremap <space> za
 set viewoptions=folds,cursor
 augroup remember_folds
     au!
-    au BufWinLeave ?* if &buftype ==# '' | silent! mkview | endif
+    " skip foldless windows (fdm=manual): their view would override SimpylFold on the next open
+    au BufWinLeave ?* if &buftype ==# '' && &foldmethod !=# 'manual' | silent! mkview | endif
     au BufWinEnter ?* if &buftype ==# '' | silent! loadview | endif
 augroup END
 
@@ -119,8 +120,8 @@ set splitright
 set nu
 set wildmenu " turn on wild menu
 
-" ignore compiled files
-set wildignore=*.o,*~,*.pyc
+" ignore compiled and 3d model files
+set wildignore=*.o,*~,*.pyc,*.stl
 if has("win16") || has("win32")
     set wildignore+=.git\*,.hg\*,.svn\*
 else
