@@ -103,7 +103,7 @@ hi pythonException ctermfg=1
 hi pythonInclude ctermfg=1
 
 " async, await
-"hi pythonAsync ctermfg=4
+hi pythonAsync ctermfg=1
 
 " @
 hi pythonDecorator ctermfg=5
