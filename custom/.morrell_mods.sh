@@ -52,7 +52,7 @@ alias claude='COLORTERM=truecolor claude'
 
 ##### CONFIGS #####
 alias ahkcfg='vi /mnt/e/scripts/custom.ahk'
-alias glazecfg='vi /mnt/c/users/colin/.glzr/glazewm/config.yaml'
+alias glazecfg='vi ~/dotfiles/.glzr/glazewm/config.yaml && cp ~/dotfiles/.glzr/glazewm/config.yaml /mnt/c/users/colin/.glzr/glazewm/config.yaml'
 alias ipycfg='vi /home/colin/.ipython/profile_default/ipython_config.py'
 alias mmod='vi /home/colin/custom/.morrell_mods.sh'
 alias tmuxcfg='vi /home/colin/.tmux.conf'

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# symlink tracked dotfiles from this repo into $HOME
+# symlink tracked dotfiles from this repo into $HOME (and copy the COPIES entries to Windows)
 #
 # each path below is relative to both this repo and $HOME, e.g. ".vimrc" links
 # ~/.vimrc -> <repo>/.vimrc. existing files that aren't already the right link
@@ -32,6 +32,12 @@ FILES=(
     .vim/config/tmux-navigator.vim
     .vim/autoload/airline/extensions/default.vim
     .claude/CLAUDE.md
+)
+
+# copied, not linked: Windows apps can't read WSL symlinks on C:
+# repo path -> Windows destination
+declare -A COPIES=(
+    [.glzr/glazewm/config.yaml]=/mnt/c/users/colin/.glzr/glazewm/config.yaml
 )
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -70,4 +76,24 @@ for f in "${FILES[@]}"; do
     echo "link     $f"
     run mkdir -p "$(dirname "$dest")"
     run ln -s "$src" "$dest"
+done
+
+for f in "${!COPIES[@]}"; do
+    src="$REPO/$f"
+    dest="${COPIES[$f]}"
+
+    if [[ -e "$dest" ]] && cmp -s "$src" "$dest"; then
+        echo "ok       $f (copy)"
+        continue
+    fi
+
+    if [[ -e "$dest" ]]; then
+        echo "backup   $dest -> $BACKUP/$f"
+        run mkdir -p "$(dirname "$BACKUP/$f")"
+        run cp "$dest" "$BACKUP/$f"
+    fi
+
+    echo "copy     $f -> $dest"
+    run mkdir -p "$(dirname "$dest")"
+    run cp "$src" "$dest"
 done

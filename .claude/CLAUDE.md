@@ -6,7 +6,7 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
 - Never use plain `sed -i`, `cp`/`mv` onto the ~ path, or write-to-temp-and-rename on these files: each replaces the symlink with a regular file. Use `sed -i --follow-symlinks`, or edit the copy under ~/dotfiles directly.
 - Before and after editing any dotfile in ~, check it's still a symlink (`ls -l`). If one was broken, copy the newer content into ~/dotfiles and recreate the link with `ln -sfn`.
 - To track a new file: move it into ~/dotfiles, add it to FILES in install.sh, run install.sh.
-- Windows Terminal settings.json is copied, not symlinked.
+- Windows-side configs are copied, not symlinked (Windows apps can't read WSL symlinks): winterm settings.json by hand, GlazeWM config.yaml via the COPIES array in install.sh.
 
 ## Reply formatting
 - Be brief. Answer what was asked and stop: no tangents, unrequested background, or offers of follow-up work unless something is actually broken or risky.
