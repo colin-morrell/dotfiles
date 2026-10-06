@@ -21,6 +21,8 @@ FILES=(
     .ipython/profile_default/startup/10-logging-colors.py
     .ipython/profile_default/startup/20-rich-pretty.py
     .vim/after/syntax/python.vim
+    .vim/after/syntax/json.vim
+    .vim/after/syntax/yaml.vim
     .vim/config/airline.vim
     .vim/config/devicons.vim
     .vim/config/git.vim
