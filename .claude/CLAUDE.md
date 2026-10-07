@@ -40,6 +40,9 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
 ## Vim
 - Never remind me to reload vim buffers (`:e`, `:e!`), and never mention .swp files or that a file may be open in vim. Just edit the file.
 
+## Shell
+- To pick up zsh config changes, tell me to run `reload` (alias for `clear && exec zsh`), never `source ~/.zshrc`, which doesn't work well with p10k.
+
 ## Git
 - I only use git from WSL (zsh in Windows Terminal), including for repos on /mnt/*. /mnt/c/Program Files/Git is an old unused Git for Windows install; don't raise WSL-vs-Git-for-Windows interop issues. Repos on /mnt/* still see every file as 777 through DrvFs, so `core.fileMode false` is worth setting there.
 
