@@ -61,7 +61,7 @@ alias vimcfg='vi /home/colin/.vimrc'
 ##### CD SHORTCUTS #####
 alias cd3dp='cd /mnt/e/3dp/'
 alias 3dpy='cd /home/colin/3dp/3dpy'
-alias 3dipy='3dpy && poetry env activate && poetry run -v ipython'
+alias 3dipy='3dpy && uv run ipython'
 
 ##### PYTHON #####
 alias flake8='flake8 --max-line-length 99 --extend-ignore=W605'
