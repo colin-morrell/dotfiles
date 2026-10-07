@@ -43,6 +43,9 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
 ## Shell
 - To pick up zsh config changes, tell me to run `reload` (alias for `clear && exec zsh`), never `source ~/.zshrc`, which doesn't work well with p10k.
 
+## IPython
+- Whenever you run IPython yourself, pass `--HistoryManager.hist_file=/home/colin/.ipython/profile_default/history_claude.sqlite` so your inputs stay out of my history (~/.ipython/profile_default/history.sqlite, shared by every project).
+
 ## Git
 - I only use git from WSL (zsh in Windows Terminal), including for repos on /mnt/*. /mnt/c/Program Files/Git is an old unused Git for Windows install; don't raise WSL-vs-Git-for-Windows interop issues. Repos on /mnt/* still see every file as 777 through DrvFs, so `core.fileMode false` is worth setting there.
 
