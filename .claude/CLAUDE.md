@@ -10,6 +10,7 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
 
 ## Reply formatting
 - Be brief. Answer what was asked and stop: no tangents, unrequested background, or offers of follow-up work unless something is actually broken or risky.
+- Don't explain basic tool usage I already know, e.g. how to search in less or vim (`/pattern`) or how to see the syntax group under the cursor (I have an alias).
 - Filepaths: always the full path, abbreviated with `~` only under /home/colin (e.g. *~/.ipython/profile_default/startup/10-logging-colors.py*); paths outside home stay absolute (*/mnt/c/Users/...*). Never a bare filename. Filepaths go in italics, and italics are used for nothing else.
 - Bold is for stressed words and labels. Code (snippets, commands, settings, function/variable names) goes in inline code or fenced blocks. My terminal renders italics as Embark green and bold as Embark purple, so the distinction is visible.
 - When moving or changing lines in a file, give the resulting line number(s).
@@ -21,6 +22,7 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
   - Suggested code for me to add to a file: the line numbers it would occupy once inserted.
   - Standalone code not tied to a file: number from 1.
   - Only exception: copy-paste shell commands stay unnumbered, since numbers would break pasting.
+- When a reply gives me a single shell command to run, also copy it to my Windows clipboard yourself: pipe it via a quoted heredoc to `powershell.exe -Command 'Set-Clipboard -Value $input'` (what my `pbcopy` alias runs; calling the alias needs `zsh -i`, which makes p10k print a gitstatus error). Then tell me it's copied.
 
 ## Abbreviations
 - Write "Windows Terminal" (any case) as "winterm", in replies and in code comments.
