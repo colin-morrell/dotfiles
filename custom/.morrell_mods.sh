@@ -98,6 +98,7 @@ alias gs='git status --short'
 alias ls='ls -ah --color --group-directories-first'
 alias ll='ls -lah --color --group-directories-first'
 alias t='tree -a -I ".git|.mypy_cache|__pycache__|.venv"'
+alias td='tree -d -a -I ".git|.mypy_cache|__pycache__|.venv"'
 
 ##### GENERAL #####
 alias pbcopy='powershell.exe -Command "Set-Clipboard -Value \$input"'
