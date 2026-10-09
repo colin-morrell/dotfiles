@@ -8,5 +8,3 @@
 	required = true
 [init]
 	defaultBranch = main
-[color]
-	status = always
