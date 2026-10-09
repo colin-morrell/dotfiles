@@ -22,10 +22,22 @@ Every path in the FILES array of ~/dotfiles/install.sh is a real file in ~/dotfi
   - Suggested code for me to add to a file: the line numbers it would occupy once inserted.
   - Standalone code not tied to a file: number from 1.
   - Only exception: copy-paste shell commands stay unnumbered, since numbers would break pasting.
+- Step lists: put each step's single-line command in inline code on the same line as the step, e.g. **Install with test deps:** `uv pip install -e '.[test]'`, not in a fenced block below it. Leave out details I don't need to act on, like supported version ranges.
+- Action-item lists: lead each item with the action, then the file(s); when an item applies to several files, list each file in a sublist under it. Summarize groups of similar calls with a wildcard (`logging.*`) rather than listing each one. A good example:
+  - Add `logger = logging.getLogger(__name__)` after the imports in:
+    - *features.py*
+    - *generate.py*
+  - Change `logging.*` calls to `logger.*` in:
+    - *features.py*
+    - *storage.py*
+    - *generate.py*
+  - Run `uv run ruff check src` to confirm the LOG015 errors are gone.
 - When a reply gives me a single shell command to run, also copy it to my Windows clipboard yourself: pipe it via a quoted heredoc to `powershell.exe -Command 'Set-Clipboard -Value $input'` (what my `pbcopy` alias runs; calling the alias needs `zsh -i`, which makes p10k print a gitstatus error). Then tell me it's copied.
 
 ## Abbreviations
 - Write "Windows Terminal" (any case) as "winterm", in replies and in code comments.
+- Write "virtualenv" as "venv".
+- Claude Code terms: say "session" rather than "conversation", and "agent" rather than "job" (a background Claude Code process), to keep the terminology consistent.
 
 ## Code style
 - Single-line comments go on their own line above the code they describe, not inline at the end of the line.
