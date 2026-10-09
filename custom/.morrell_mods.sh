@@ -97,8 +97,22 @@ alias gc='git commit -m'
 alias gs='git status --short'
 alias ls='ls -ah --color --group-directories-first'
 alias ll='ls -lah --color --group-directories-first'
-alias t='tree -a -I ".git|.mypy_cache|__pycache__|.venv"'
-alias td='tree -d -a -I ".git|.mypy_cache|__pycache__|.venv"'
+
+##### TREE #####
+tree_ignore=(
+    '.git'
+    '.mypy_cache'
+    '__pycache__'
+    '.ruff_cache'
+    '.venv'
+)
+TREE_IGNORE=${(j.|.)tree_ignore}
+alias t='tree -a -I "$TREE_IGNORE"'
+alias t2='tree -a -I "$TREE_IGNORE" -L 2'
+alias t3='tree -a -I "$TREE_IGNORE" -L 3'
+alias td='tree -d -a -I "$TREE_IGNORE"'
+alias td2='tree -d -a -I "$TREE_IGNORE" -L 2'
+alias td3='tree -d -a -I "$TREE_IGNORE" -L 3'
 
 ##### GENERAL #####
 alias pbcopy='powershell.exe -Command "Set-Clipboard -Value \$input"'
@@ -111,7 +125,7 @@ alias pdw='pwd'
 alias tac='tail -r'  # TODO --> 10.03.26 broken on WSL
 alias whattime='python ~/custom/whattime.py'
 # enable exact (24-bit) theme colors inside tmux
-alias claude='COLORTERM=truecolor claude'  
+alias claude='COLORTERM=truecolor claude'
 
 ##### CONFIGS #####
 alias ahkcfg='vi /mnt/e/scripts/custom.ahk'
